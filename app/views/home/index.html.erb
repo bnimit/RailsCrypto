@@ -1,3 +1,10 @@
 <h1>Home World</h1>
-<h2> This is my first rails app</h2>
-<%= @hello %>
+<p> This is my first rails app</p>
+<br/><br/>
+<% for coin in @coins %>
+  <% for symbol in @my_coins %>
+    <% if symbol == coin['symbol'] %>
+      <%= coin['name'] %> : $<%= coin['price_usd'] %><br/>
+    <% end %>
+  <% end %>
+<% end %>
