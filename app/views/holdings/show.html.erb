@@ -1,0 +1,22 @@
+<p>
+  <strong>Symbol:</strong>
+  <%= @holding.symbol %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @holding.user_id %>
+</p>
+
+<p>
+  <strong>Cost per Unit:</strong>
+  <%= @holding.cost_per %>
+</p>
+
+<p>
+  <strong>Amount owned:</strong>
+  <%= @holding.amount_owned %>
+</p>
+
+<%= link_to 'Edit', edit_holding_path(@holding) %> |
+<%= link_to 'Back', holdings_path %>

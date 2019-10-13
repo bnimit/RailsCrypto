@@ -1,10 +1,25 @@
-<h1>Home World</h1>
-<p> This is my first rails app</p>
+<u><h4>Here are the top 15 crytpocurrencies by market rankings!</h4></u>
 <br/><br/>
-<% for coin in @coins %>
-  <% for symbol in @my_coins %>
-    <% if symbol == coin['symbol'] %>
-      <%= coin['name'] %> : $<%= coin['price_usd'] %><br/>
-    <% end %>
-  <% end %>
-<% end %>
+<% record_count = 0 %>
+  <table class="table">
+    <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Currency</th>
+          <th scope="col">Symbol</th>
+          <th scope="col">Price( $ )</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for coin in @coins %>
+          <tr>
+            <% if record_count<15 %>
+              <th scope="row"><%= record_count += 1 %></th>
+              <td><%= coin['name'] %></td>
+              <td><%= coin['symbol'] %></td>
+              <td><%= coin['price_usd'] %></td>
+          </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+    </table>
