@@ -1,34 +1,47 @@
 <h1>Holdings</h1>
-<table class="table">
+<table class="table table-striped table-bordered table-hover">
   <thead>
     <tr>
       <th scope="col">#</th>
+      <th scope="col">Name</th>
       <th scope="col">Symbol</th>
-      <th scope="col">User</th>
-      <th scope="col">Cost per Unit ($) </th>
+      <th scope="col">Cost Per Unit ($) </th>
       <th scope="col">Amount Owned</th>
-      <th scope="col">Value</th>
-      <th scope="col">Actions Available</th>
+      <th scope="col">Current Price</th>
+      <th scope="col">Total Current Value</th>
+      <th scope="col">Total Paid</th>
+      <th scope="col">Profit / Loss</th>
+
     </tr>
   </thead>
 
   <tbody>
-    <% @holdings.each_with_index do |holding, index| %>
-      <tr>
-        <th scope="row"><%= index+1 %></th>
-        <td><%= holding.symbol %></td>
-        <td><%= holding.user_id %></td>
-        <td><%= holding.cost_per %></td>
-        <td><%= holding.amount_owned %></td>
-        <td>$<%= holding.amount_owned * holding.cost_per %></td>
-        <td><%= link_to 'Show', holding %> |
-        <%= link_to 'Edit', edit_holding_path(holding) %> |
-        <%= link_to 'Destroy', holding, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+    <% count =0 %>
+    <% @holdings.each do |holding| %>
+      <%if holding.user_id == current_user.id %>
+          <% if holding.symbol %>
+            <% holding.symbol = holding.symbol.upcase %>
+          <% end %>
+        <tr>
+          <% for x in @coins %>
+            <% if holding.symbol == x['symbol'] %>
+              <td scope="row"><%= count+=1 %></td>
+              <td><%= link_to x['id'].capitalize, holding %></td>
+              <td><%= holding.symbol %></td>
+              <td>$ <%= holding.cost_per %></td>
+              <td><%= holding.amount_owned %></td>
+              <td>$ <%= x['price_usd']%></td>
+              <td>$ <%= x['price_usd'].to_d * holding.amount_owned %></td>
+              <td>$ <%= holding.amount_owned * holding.cost_per%></td>
+              <td>$ <%= ( x['price_usd'].to_d * holding.amount_owned) - (holding.amount_owned * holding.cost_per) %></td>
+              <%end%>
+            <% end %>
+          </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
 
 <br>
 
-<u><b><%= link_to 'New Holding', new_holding_path %></b></u>
+<u><b><%= link_to 'New Holding', new_holding_path, class: "btn btn-default" %></b></u>

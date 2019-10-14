@@ -1,11 +1,19 @@
 class HoldingsController < ApplicationController
   before_action :set_holding, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
+  before_action :correct_user, only: [:edit, :update, :destroy, :show]
 
   # GET /holdings
   # GET /holdings.json
   def index
+    require 'net/http'
+    require 'json'
     @holdings = Holding.all
+    @url = 'https://api.coinmarketcap.com/v1/ticker/'
+    @uri = URI(@url)
+    puts @uri
+    @response = Net::HTTP.get(@uri)
+    @coins = JSON.parse(@response)
   end
 
   # GET /holdings/1
@@ -71,5 +79,10 @@ class HoldingsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def holding_params
       params.require(:holding).permit(:symbol, :user_id, :cost_per, :amount_owned)
+    end
+
+    def correct_user
+      @correct = current_user.holdings.find_by(id: params[:id])
+      redirect_to holdings_path, notice: "Not Authorized to edit this entry" if @correct.nil?
     end
 end
